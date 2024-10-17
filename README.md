@@ -40,5 +40,40 @@ ORDER BY weekday
 Result: 
 ![image](https://github.com/user-attachments/assets/4013c991-0a87-4f69-a543-fe8e97316cc2)
 
+2. Average steps per hour
+   `
+   SELECT 
+  ROUND(AVG(step_count),0) AS avg_steps,
+  EXTRACT(HOUR FROM activity_datetime) AS active_hour
+FROM `bella-beat-project-438009.upload_data.hourly_step`
+GROUP BY active_hour
+ORDER BY active_hour
+`
+Result:
+![image](https://github.com/user-attachments/assets/bb6282d2-a67f-409b-8531-f22117636828)
 
+3. Average sleep duration (in hour) by weekday
+   `
+SELECT 
+  ROUND((AVG(TotalMinutesAsleep)/60),2) AS avg_sleep_hours,
+  FORMAT_TIMESTAMP ('%A', SleepDay) AS day_name,
+  EXTRACT(DAYOFWEEK FROM SleepDay) AS weekday
+FROM `bella-beat-project-438009.upload_data.sleep-tz` 
+GROUP BY day_name, weekday
+ORDER BY weekday
+   `
+   Result:
+  ![image](https://github.com/user-attachments/assets/06b63693-254b-4987-b62e-f0d4db9c4f08)
+
+ 4. Sleep pattern of Fitbeat users
+    `
+SELECT 
+  MIN(TotalTimeInBed - TotalMinutesAsleep) AS min_awake_time,
+  MAX(TotalTimeInBed - TotalMinutesAsleep) AS max_awake_time,
+  ROUND(AVG(TotalTimeInBed - TotalMinutesAsleep),2) AS avg_awake_time,
+  AVG(TotalMinutesAsleep/60) AS sleeping_time
+FROM `bella-beat-project-438009.upload_data.sleep-tz`
+`
+Result:
+![image](https://github.com/user-attachments/assets/e92cc84c-cdda-4edc-87c8-126b0fe19cf5)
 
