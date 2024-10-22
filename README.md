@@ -22,7 +22,57 @@ It contains 18 csv files about daily activity, sleep, weight, calories and inten
 The data is only for the months of April and May in 2016 so it is not up to date and may not fully refllect the current trends in smart device usage.
 I did not use all the 18 files. The daily_steps, daily_calories and daily_intensity data were included in the daily_activity table.
 
- - Check for duplicate and blanks
+- Check the unique users in daily_activity, hourly_steps and sleep_day table
+`
+SELECT COUNT(DISTINCT Id)
+FROM `bella-beat-project-438009.upload_data.daily_activity`
+`
+SELECT COUNT(DISTINCT Id)
+FROM `bella-beat-project-438009.upload_data.hourly_step`
+
+`SELECT COUNT(DISTINCT Id)
+FROM `bella-beat-project-438009.upload_data.sleep_day` 
+`
+daily_activity and hourly_steps have 33 unique users. 
+sleep_day has only 24 unique users.
+
+ - Check for duplicates in the 3 tables and blanks
+`
+SELECT Id, ActivityDate, TotalSteps, Count(*)
+FROM `bella-beat-project-438009.upload_data.daily_activity` 
+GROUP BY id, ActivityDate, TotalSteps
+HAVING Count(*) > 1
+`
+`
+SELECT 
+Id, activity_datetime,step_count, COUNT(*)
+FROM `bella-beat-project-438009.upload_data.hourly_step` 
+GROUP BY Id, activity_datetime,step_count
+HAVING COUNT(*)>1
+`
+
+`SELECT 
+Id, sleepDay, totalsleeprecords, COUNT(*)
+FROM `bella-beat-project-438009.upload_data.sleep_day`
+GROUP BY Id,sleepDay, totalsleeprecords
+HAVING COUNT(*) >1
+`
+daily_activity and hourly_steps have no duplicate while the sleep_day table has 3 duplicates.
+![image](https://github.com/user-attachments/assets/e6864cb5-c008-4c33-b53c-338de6d71fcd)
+
+Delete the duplicate rows in the sleep_day table
+`
+CREATE TABLE `bella-beat-project-438009.upload_data.sleep_day_clean`
+AS
+SELECT DISTINCT *
+FROM `bella-beat-project-438009.upload_data.sleep_day`;
+
+DROP TABLE `bella-beat-project-438009.upload_data.sleep_day`;
+
+ALTER TABLE `bella-beat-project-438009.upload_data.sleep_day_clean`
+RENAME TO `sleep_day`
+`
+
    
 ## Process
 1. Average steps, distance, calories by different days of the week
