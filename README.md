@@ -19,7 +19,7 @@ Bellabeat is a high-tech company that manufactures health-focused smart products
 ## Prepare
 Data source https://www.kaggle.com/arashnic/fitbit 
 It contains 18 csv files about daily activity, sleep, weight, calories and intensities.
-The data is only for the months of April and May in 2016 so it is not up to date and may not fully refllect the current trends in smart device usage.
+The data is only for the months of April and May in 2016 so it is not up to date and may not fully reflect the current trends in smart device usage.
 I did not use all the 18 files. The daily_steps, daily_calories and daily_intensity data were included in the daily_activity table.
 
 - Check the unique users in daily_activity, hourly_steps and sleep_day table
@@ -35,8 +35,11 @@ FROM `bella-beat-project-438009.upload_data.sleep_day`
 `
 daily_activity and hourly_steps have 33 unique users. 
 sleep_day has only 24 unique users.
+33 users is a very small sample, not reflecting the whole population but it still gives us some interesting insights. 
+Sleep tracker and Weight log are less used functions. Weight log are the least popular. Maybe because it does not change very often or is not relevant to use. 
 
- - Check for duplicates in the 3 tables and blanks
+
+ - Check for duplicates in the 3 tables 
 `
 SELECT Id, ActivityDate, TotalSteps, Count(*)
 FROM `bella-beat-project-438009.upload_data.daily_activity` 
@@ -73,7 +76,19 @@ ALTER TABLE `bella-beat-project-438009.upload_data.sleep_day_clean`
 RENAME TO `sleep_day`
 `
 
-   
+- I also noticed that there are some records in the daily_activity table that have TotalSteps = 0 which means some users did not track their steps everyday.
+It is possible to have no fairly/lightly/ very active time but not possible to have 0 steps a day so I will not include those records in the calculation of the average steps.
+
+`
+SELECT * FROM `bella-beat-project-438009.upload_data.daily_activity` 
+WHERE TotalSteps = 0
+`
+`
+SELECT * FROM `bella-beat-project-438009.upload_data.sleep_day` WHERE TotalSleepRecords = 0
+`
+There are 77 records with TotalSteps = 0 in the daily_activity table which should not be included in the calculation later.
+There were no TotalSleepRecords = 0 in the sleep_day table.
+
 ## Process
 1. Average steps, distance, calories by different days of the week
 
@@ -84,6 +99,7 @@ RENAME TO `sleep_day`
   FORMAT_TIMESTAMP ('%A', ActivityDate) AS day_name,
   EXTRACT(DAYOFWEEK FROM ActivityDate) AS weekday
 FROM `bella-beat-project-438009.upload_data.daily_activity` 
+WHERE TotalSteps <> 0
 GROUP BY day_name, weekday
 ORDER BY weekday
 `
