@@ -22,6 +22,7 @@ It contains 18 csv files about daily activity, sleep, weight, calories and inten
 The data is only for the months of April and May in 2016 so it is not up to date and may not fully reflect the current trends in smart device usage.
 I did not use all the 18 files. The daily_steps, daily_calories and daily_intensity data were included in the daily_activity table.
 
+## Process 
 - Check the unique users in daily_activity, hourly_steps and sleep_day table
 `
 SELECT COUNT(DISTINCT Id)
@@ -89,7 +90,22 @@ SELECT * FROM `bella-beat-project-438009.upload_data.sleep_day` WHERE TotalSleep
 There are 77 records with TotalSteps = 0 in the daily_activity table which should not be included in the calculation later.
 There were no TotalSleepRecords = 0 in the sleep_day table.
 
-## Process
+## Analyze
+1. Check average steps, sedentary time, lightly active, fairly active and very active minutes for all the users   
+`
+SELECT 
+  ROUND(AVG(TotalSteps)) AS steps_average,
+  ROUND(AVG(SedentaryMinutes)) AS sendentary_average,
+  ROUND(AVG(FairlyActiveMinutes)) AS fairly_active_average,
+  ROUND(AVG(LightlyActiveMinutes)) AS lightly_active_average,
+  ROUND(AVG(VeryActiveMinutes)) AS very_active_average
+
+FROM `bella-beat-project-438009.upload_data.daily_activity` 
+WHERE TotalSteps <> 0
+
+`
+
+
 1. Average steps, distance, and calories by different days of the week
 
 `SELECT 
@@ -106,6 +122,8 @@ ORDER BY weekday
 Result: 
 ![image](https://github.com/user-attachments/assets/4013c991-0a87-4f69-a543-fe8e97316cc2)
 
+
+
 2. Average steps per hour
    `
    SELECT 
@@ -116,7 +134,8 @@ GROUP BY active_hour
 ORDER BY active_hour
 `
 Result:
-![image](https://github.com/user-attachments/assets/bfed4718-cea3-4014-9ae9-b57533da10a0)
+![image](https://github.com/user-attachments/assets/c3e92601-72be-4360-9509-2d7c3a935368)
+
 
 4. Average sleep duration (in hours) by weekday
    `
@@ -130,6 +149,7 @@ ORDER BY weekday
    `
    Result:
   ![image](https://github.com/user-attachments/assets/9a762af5-674b-47c7-a9ab-702eb908dec8)
+  ![image](https://github.com/user-attachments/assets/ca3be324-1f83-4fa4-ae10-d44a18de4d13)
 
 
  5. Sleep pattern of Fitbeat users
