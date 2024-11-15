@@ -91,7 +91,7 @@ There are 77 records with TotalSteps = 0 in the daily_activity table which shoul
 There were no TotalSleepRecords = 0 in the sleep_day table.
 
 ## Analyze
-1. Check average steps, sedentary time, lightly active, fairly active and very active minutes for all the users   
+1. Check average steps, sedentary time, lightly active, fairly active, very active minutes and average sleep minutes for all the users   
 `
 SELECT 
   ROUND(AVG(TotalSteps)) AS steps_average,
@@ -104,9 +104,20 @@ FROM `bella-beat-project-438009.upload_data.daily_activity`
 WHERE TotalSteps <> 0
 
 `
+Result:
+![image](https://github.com/user-attachments/assets/7a0ad7c0-0814-47eb-ab01-02d70d46a5f8)
 
+Average sleep minutes from sleep_day table
+`
+SELECT 
+  ROUND(AVG(TotalMinutesAsleep),2) AS average_sleep 
+FROM `bella-beat-project-438009.upload_data.sleep_day` 
+`
+Result: average sleeping time is 419 mins a day.
+The average sedentary time is 956 mins (about 16 hours) including the average sleeping time of 419 mins (about 7 hours).
+It means that on average, users had 9 hours of sedentary time when they were awake. 
 
-1. Average steps, distance, and calories by different days of the week
+2. Average steps, distance, and calories by different days of the week
 
 `SELECT 
   ROUND(AVG(TotalSteps),2) AS avg_steps,
@@ -120,13 +131,17 @@ GROUP BY day_name, weekday
 ORDER BY weekday
 `
 Result: 
+![image](https://github.com/user-attachments/assets/45620bea-d8cc-4798-8593-e65073f42352)
+
+
 ![image](https://github.com/user-attachments/assets/4013c991-0a87-4f69-a543-fe8e97316cc2)
 
 
+There are no big differences between the number of steps on different days of the week. Further analysis is needed.
 
 2. Average steps per hour
    `
-   SELECT 
+SELECT 
   ROUND(AVG(step_count),0) AS avg_steps,
   EXTRACT(HOUR FROM activity_datetime) AS active_hour
 FROM `bella-beat-project-438009.upload_data.hourly_step`
@@ -134,7 +149,11 @@ GROUP BY active_hour
 ORDER BY active_hour
 `
 Result:
-![image](https://github.com/user-attachments/assets/c3e92601-72be-4360-9509-2d7c3a935368)
+  ![image](https://github.com/user-attachments/assets/9a762af5-674b-47c7-a9ab-702eb908dec8)
+  ![image](https://github.com/user-attachments/assets/ca3be324-1f83-4fa4-ae10-d44a18de4d13)
+
+Users walk the most around 1pm-3pm, 6 pm-8pm.
+Least active time was at night. 
 
 
 4. Average sleep duration (in hours) by weekday
@@ -148,9 +167,9 @@ GROUP BY day_name, weekday
 ORDER BY weekday
    `
    Result:
-  ![image](https://github.com/user-attachments/assets/9a762af5-674b-47c7-a9ab-702eb908dec8)
-  ![image](https://github.com/user-attachments/assets/ca3be324-1f83-4fa4-ae10-d44a18de4d13)
+![image](https://github.com/user-attachments/assets/471a539f-39ca-4ed5-88ba-2868fcf2fe60)
 
+Users sleep the most on Sunday and Wednesday. 
 
  5. Sleep pattern of Fitbeat users
     `
@@ -162,6 +181,7 @@ SELECT
 FROM `bella-beat-project-438009.upload_data.sleep_day`
 `
 Result:
-![image](https://github.com/user-attachments/assets/d07bbfef-9c8d-4e03-bd4c-a7a95a72f03a)
+![image](https://github.com/user-attachments/assets/7a93fd06-1f84-4881-be2b-ba765d51ebe7)
 
+On average, people sleep for 7 hours aday but spend about 40 mins on the bed a wake. 
 
