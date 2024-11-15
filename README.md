@@ -149,8 +149,8 @@ GROUP BY active_hour
 ORDER BY active_hour
 `
 Result:
-  ![image](https://github.com/user-attachments/assets/9a762af5-674b-47c7-a9ab-702eb908dec8)
-  ![image](https://github.com/user-attachments/assets/ca3be324-1f83-4fa4-ae10-d44a18de4d13)
+![image](https://github.com/user-attachments/assets/d561b46b-cf3d-4676-a442-016fddbe8fae)
+![image](https://github.com/user-attachments/assets/ca3be324-1f83-4fa4-ae10-d44a18de4d13)
 
 Users walk the most around 1pm-3pm, 6 pm-8pm.
 Least active time was at night. 
