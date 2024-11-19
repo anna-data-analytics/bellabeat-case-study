@@ -77,8 +77,8 @@ ALTER TABLE `bella-beat-project-438009.upload_data.sleep_day_clean`
 RENAME TO `sleep_day`
 `
 
-- I also noticed that there are some records in the daily_activity table that have TotalSteps = 0 which means some users did not track their steps every day.
-It is possible to have no fairly/lightly/ very active time but not possible to have 0 steps a day so I will not include those records in the calculation of the average steps.
+- I also noticed that there are records in the daily_activity table with TotalSteps = 0 which means some users did not track their steps every day.
+It is possible to have no fairly/lightly/very active time but not possible to have 0 steps a day so I will not include those records in the calculation of the average steps.
 
 `
 SELECT * FROM `bella-beat-project-438009.upload_data.daily_activity` 
@@ -153,7 +153,7 @@ Result:
 ![image](https://github.com/user-attachments/assets/ca3be324-1f83-4fa4-ae10-d44a18de4d13)
 
 Users walk the most around 1pm-3pm, 6 pm-8pm.
-Least active time was at night. 
+The least active time was at night. 
 
 
 4. Average sleep duration (in hours) by weekday
