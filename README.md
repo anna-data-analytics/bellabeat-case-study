@@ -78,7 +78,7 @@ RENAME TO `sleep_day`
 `
 
 - I also noticed that there are records in the daily_activity table with TotalSteps = 0 which means some users did not track their steps every day.
-It is possible to have no fairly/lightly/very active time but not possible to have 0 steps a day so I will not include those records in the calculation of the average steps.
+It is possible to have no fairly/lightly/very active time but not possible to have 0 steps a day. 
 
 `
 SELECT * FROM `bella-beat-project-438009.upload_data.daily_activity` 
@@ -89,6 +89,21 @@ SELECT * FROM `bella-beat-project-438009.upload_data.sleep_day` WHERE TotalSleep
 `
 There are 77 records with TotalSteps = 0 in the daily_activity table which should not be included in the calculation later.
 There were no TotalSleepRecords = 0 in the sleep_day table.
+
+I deleted the records with TotalSteps = 0.
+
+`
+CREATE TABLE `bella-beat-project-438009.upload_data.daily_activity_clean` 
+AS 
+SELECT *
+FROM `bella-beat-project-438009.upload_data.daily_activity` 
+WHERE TotalSteps <> 0;
+
+DROP TABLE `bella-beat-project-438009.upload_data.daily_activity`;
+
+ALTER TABLE `bella-beat-project-438009.upload_data..daily_activity_clean`
+RENAME TO `daily_activity`
+`
 
 ## Analyze
 1. Check average steps, sedentary time, lightly active, fairly active, very active minutes and average sleep minutes for all the users   
