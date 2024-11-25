@@ -136,9 +136,9 @@ FROM `bella-beat-project-438009.upload_data.sleep_day`
 Result: average sleeping time is 419 mins a day.
 The average sedentary time is 956 mins (about 16 hours) including the average sleeping time of 419 mins (about 7 hours).
 It means that on average, users had 9 hours of sedentary time when they were awake which is a big part of the time in a day.
-Also, most users prefers light activity. 
+Also, most users prefer light activity. 
 
-![image](https://github.com/user-attachments/assets/b5e218c5-7f6e-4a4a-9c07-71b7091e4445)
+![image](https://github.com/user-attachments/assets/93367a2a-375e-4564-b3b8-478015d45a3e)
 
 
 2. Average steps, distance, and calories by different days of the week
@@ -181,8 +181,7 @@ Result:
 Users walk the most around 12pm-2pm, 5 pm-7pm. They are lunch time and evening time
 The least active time was at night 0 am - 5 am. 
 
-![image](https://github.com/user-attachments/assets/33b234b7-9be1-484f-9644-cfce2ba3bab8)
-
+![image](https://github.com/user-attachments/assets/a0fc35e8-6dee-4912-99a5-f1074de23897)
 
 4. Average sleep duration (in hours) by weekday
    `
@@ -199,7 +198,7 @@ ORDER BY weekday
 
 Users sleep the most on Sunday and Wednesday. 
 
-![image](https://github.com/user-attachments/assets/b2c29e08-3271-4d64-8165-606d8c2bb49e)
+![image](https://github.com/user-attachments/assets/dda13a93-78f4-4871-addb-9de5a2f732c8)
 
 
  5. Sleep pattern of Fitbeat users
