@@ -199,7 +199,7 @@ ORDER BY weekday
 
 Users sleep the most on Sunday and Wednesday. 
 
-![image](https://github.com/user-attachments/assets/dda13a93-78f4-4871-addb-9de5a2f732c8)
+![image](https://github.com/user-attachments/assets/dd81be35-95ad-409a-8a2b-6a1f015cac99)
 
 
  5. Sleep pattern of Fitbeat users
