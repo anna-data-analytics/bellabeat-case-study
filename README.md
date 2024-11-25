@@ -160,7 +160,8 @@ Result:
 ![image](https://github.com/user-attachments/assets/4013c991-0a87-4f69-a543-fe8e97316cc2)
 
 
-![image](https://github.com/user-attachments/assets/acd87606-851e-419b-9911-6fa7e6ddb2f1)
+![image](https://github.com/user-attachments/assets/726309ed-6564-421f-9b90-136fc60be79d)
+
 
 There are no big differences between the number of steps on different days of the week. Further analysis is needed.
 
