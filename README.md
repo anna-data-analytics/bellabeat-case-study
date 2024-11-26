@@ -105,7 +105,9 @@ ALTER TABLE `bella-beat-project-438009.upload_data..daily_activity_clean`
 RENAME TO `daily_activity`
 `
 
-## Analyze
+## Analyze and Share 
+I analyzed and used Tableau to create some visualizations attached to the analyze result below.
+
 1. Check average steps, sedentary time, lightly active, fairly active, very active minutes and average sleep minutes for all the users   
 `
 SELECT 
@@ -216,3 +218,20 @@ Result:
 
 On average, people sleep for 7 hours a day but spend about 40 mins on the bed a wake. 
 
+## Act
+Some insights from the analyze
+- Not all users use sleep tracker and weight log regularly, especially weight log is the least used function.
+- Some users forgot to track their steps in some days
+- On average, users had about 9 hours of sedentary time which is a large part in a day
+- Most users prefers light activity
+- Users were most active around 12pm-2pm, 5 pm-7p
+- No clear correlation between weekdays and number of steps
+- Users are no sleeping at least 8 hours a day 
+
+  Recommendations
+  - Further surveys, and analysis are needed to check why the weight log is not popular (eg the relevant of the function, ease of use etc)
+  - Remind the users to check their steps every day
+  - The best time for advertisement is around 12pm-2pm, 5 pm-7p when people are active and can look at the app more often
+  - Push messages about the risk of high sedentary time, health benefits of walking more than 8k steps per day to make people more active, especially on the day people tend to be less active such as Sunday
+  - Send messages about bad effects of not having enough 8 hours sleeping a day. May create some more features to make a sleep schedule or help peole have a better sleep
+  - 
