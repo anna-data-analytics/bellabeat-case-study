@@ -41,31 +41,39 @@ Sleep tracker and Weight log are less used functions. Weight log are the least p
 
 
  - Check for duplicates in the 3 tables 
-`
+```sql
 SELECT Id, ActivityDate, TotalSteps, Count(*)
 FROM `bella-beat-project-438009.upload_data.daily_activity` 
 GROUP BY id, ActivityDate, TotalSteps
 HAVING Count(*) > 1
-`
-`
+```
+
+```sql
 SELECT 
 Id, activity_datetime,step_count, COUNT(*)
 FROM `bella-beat-project-438009.upload_data.hourly_step` 
 GROUP BY Id, activity_datetime,step_count
 HAVING COUNT(*)>1
-`
+```
 
-`SELECT 
+```sql
+SELECT 
 Id, sleepDay, totalsleeprecords, COUNT(*)
 FROM `bella-beat-project-438009.upload_data.sleep_day`
 GROUP BY Id,sleepDay, totalsleeprecords
 HAVING COUNT(*) >1
-`
+```
 daily_activity and hourly_steps have no duplicate while the sleep_day table has 3 duplicates.
-![image](https://github.com/user-attachments/assets/e6864cb5-c008-4c33-b53c-338de6d71fcd)
+
+| Id | sleepDay | totalsleeprecords | count |
+| --- | --- | --: | --: |
+| 4388161847 | 2016-05-05 12:00:00.000000 UTC | 1 | 2 |
+| 4702921684 | 2016-05-07 12:00:00.000000 UTC | 1 | 2 |
+| 8378563200 | 2016-04-25 12:00:00.000000 UTC | 1 | 2 |
+
 
 Delete the duplicate rows in the sleep_day table
-`
+```sql
 CREATE TABLE `bella-beat-project-438009.upload_data.sleep_day_clean`
 AS
 SELECT DISTINCT *
@@ -75,24 +83,23 @@ DROP TABLE `bella-beat-project-438009.upload_data.sleep_day`;
 
 ALTER TABLE `bella-beat-project-438009.upload_data.sleep_day_clean`
 RENAME TO `sleep_day`
-`
+```
 
 - I also noticed that there are records in the daily_activity table with TotalSteps = 0 which means some users did not track their steps every day.
 It is possible to have no fairly/lightly/very active time but not possible to have 0 steps a day. 
 
-`
+```sql
 SELECT * FROM `bella-beat-project-438009.upload_data.daily_activity` 
 WHERE TotalSteps = 0
-`
-`
+
 SELECT * FROM `bella-beat-project-438009.upload_data.sleep_day` WHERE TotalSleepRecords = 0
-`
+```
 There are 77 records with TotalSteps = 0 in the daily_activity table which should not be included in the calculation later.
 There were no TotalSleepRecords = 0 in the sleep_day table.
 
 I deleted the records with TotalSteps = 0.
 
-`
+```sql
 CREATE TABLE `bella-beat-project-438009.upload_data.daily_activity_clean` 
 AS 
 SELECT *
@@ -103,13 +110,13 @@ DROP TABLE `bella-beat-project-438009.upload_data.daily_activity`;
 
 ALTER TABLE `bella-beat-project-438009.upload_data..daily_activity_clean`
 RENAME TO `daily_activity`
-`
+```
 
 ## Analyze and Share 
 I analyzed and used Tableau to create some visualizations attached to the analyze result below.
 
 1. Check average steps, sedentary time, lightly active, fairly active, very active minutes and average sleep minutes for all the users   
-`
+```sql
 SELECT 
   ROUND(AVG(TotalSteps)) AS steps_average,
   ROUND(AVG(SedentaryMinutes)) AS sendentary_average,
@@ -120,21 +127,23 @@ SELECT
 FROM `bella-beat-project-438009.upload_data.daily_activity` 
 WHERE TotalSteps <> 0
 
-`
+```
 Result:
-![image](https://github.com/user-attachments/assets/7a0ad7c0-0814-47eb-ab01-02d70d46a5f8)
+| steps_average | sendentary_average | fairly_active_average | lightly_active_average | very_active_average |
+| --: | --: | --: | --: | --: |
+| 8319.0 | 956.0 | 15.0 | 210.0 | 23.0 |
+
 
 The Centers for Disease Control and Prevention (CDC) recommends taking 8,000 steps per day, aiming for 10,000 steps per day. The average steps of Bella Beat users is 8319 which met this criteria. 
-Also, the total of average fairly active and and very active time is 38 mins which also met the American Heart Association recommendations for walking at least
-30 minutes per day to reduce the risk of chronic diseases.
+Also, the total of average fairly active and and very active time is 38 mins which also met the American Heart Association recommendations for walking at least 30 minutes per day to reduce the risk of chronic diseases.
 
 
 Average sleep minutes from sleep_day table
-`
+```sql
 SELECT 
   ROUND(AVG(TotalMinutesAsleep),2) AS average_sleep 
 FROM `bella-beat-project-438009.upload_data.sleep_day` 
-`
+```
 Result: average sleeping time is 419 mins a day.
 The average sedentary time is 956 mins (about 16 hours) including the average sleeping time of 419 mins (about 7 hours).
 It means that on average, users had 9 hours of sedentary time when they were awake which is a big part of the time in a day.
@@ -145,7 +154,8 @@ Also, most users prefer light activity.
 
 2. Average steps, distance, and calories by different days of the week
 
-`SELECT 
+```sql
+SELECT 
   ROUND(AVG(TotalSteps),2) AS avg_steps,
   ROUND(AVG(TotalDistance),2) AS avg_distance,
   FORMAT_TIMESTAMP ('%A', ActivityDate) AS day_name,
@@ -154,12 +164,17 @@ FROM `bella-beat-project-438009.upload_data.daily_activity`
 WHERE TotalSteps <> 0
 GROUP BY day_name, weekday
 ORDER BY weekday
-`
+```
 Result: 
-![image](https://github.com/user-attachments/assets/45620bea-d8cc-4798-8593-e65073f42352)
-
-
-![image](https://github.com/user-attachments/assets/4013c991-0a87-4f69-a543-fe8e97316cc2)
+| avg_steps | avg_distance | day_name | weekday |
+| --: | --: | --: | --: |
+| 7626.55 | 5.53 | Sunday | 1 |
+| 8488.22 | 6.06 | Monday | 2 |
+| 8949.28 | 6.42 | Tuesday | 3 |
+| 8157.6 | 5.92 | Wednesday | 4 |
+| 8185.4 | 5.87 | Thursday | 5 |
+| 7820.64 | 5.58 | Friday | 6 |
+| 8946.63 | 6.42 | Saturday | 7 |
 
 
 ![image](https://github.com/user-attachments/assets/726309ed-6564-421f-9b90-136fc60be79d)
@@ -169,17 +184,43 @@ There are no big differences between the number of steps on different days of th
 
 
 2. Average steps per hour
-   `
+```sql
 SELECT 
   ROUND(AVG(step_count),0) AS avg_steps,
   EXTRACT(HOUR FROM activity_datetime) AS active_hour
 FROM `bella-beat-project-438009.upload_data.hourly_step`
 GROUP BY active_hour
 ORDER BY active_hour
-`
+```
 Result:
-![image](https://github.com/user-attachments/assets/d561b46b-cf3d-4676-a442-016fddbe8fae)
-![image](https://github.com/user-attachments/assets/ca3be324-1f83-4fa4-ae10-d44a18de4d13)
+
+| avg_steps | active_hour |
+| --: | --: |
+| 42.0 | 0 |
+| 23.0 | 1 |
+| 17.0 | 2 |
+| 6.0 | 3 |
+| 13.0 | 4 |
+| 44.0 | 5 |
+| 179.0 | 6 |
+| 306.0 | 7 |
+| 428.0 | 8 |
+| 433.0 | 9 |
+| 482.0 | 10 |
+| 457.0 | 11 |
+| 549.0 | 12 |
+| 538.0 | 13 |
+| 541.0 | 14 |
+| 406.0 | 15 |
+| 497.0 | 16 |
+| 550.0 | 17 |
+| 599.0 | 18 |
+| 583.0 | 19 |
+| 354.0 | 20 |
+| 308.0 | 21 |
+| 238.0 | 22 |
+| 122.0 | 23 |
+
 
 Users walk the most around 12pm-2pm, 5 pm-7pm. They are lunch time and evening time
 The least active time was at night 0 am - 5 am. 
@@ -187,7 +228,7 @@ The least active time was at night 0 am - 5 am.
 ![image](https://github.com/user-attachments/assets/a0fc35e8-6dee-4912-99a5-f1074de23897)
 
 4. Average sleep duration (in hours) by weekday
-   `
+```sql
 SELECT 
   ROUND((AVG(TotalMinutesAsleep)/60),2) AS avg_sleep_hours,
   FORMAT_TIMESTAMP ('%A', SleepDay) AS day_name,
@@ -195,28 +236,39 @@ SELECT
 FROM `bella-beat-project-438009.upload_data.sleep_day` 
 GROUP BY day_name, weekday
 ORDER BY weekday
-   `
+```
    Result:
-![image](https://github.com/user-attachments/assets/471a539f-39ca-4ed5-88ba-2868fcf2fe60)
-
+| avg_sleep_hours | day_name | weekday |
+| --- | --- | --- |
+| 7.55 | Sunday | 1 |
+| 6.98 | Monday | 2 |
+| 6.74 | Tuesday | 3 |
+| 7.24 | Wednesday | 4 |
+| 6.71 | Thursday | 5 |
+| 6.76 | Friday | 6 |
+| 7.01 | Saturday | 7 |
+   
 Users sleep the most on Sunday and Wednesday. 
 
 ![image](https://github.com/user-attachments/assets/dd81be35-95ad-409a-8a2b-6a1f015cac99)
 
 
  5. Sleep pattern of Fitbeat users
-    `
+```sql
 SELECT 
   MIN(TotalTimeInBed - TotalMinutesAsleep) AS min_awake_time,
   MAX(TotalTimeInBed - TotalMinutesAsleep) AS max_awake_time,
   ROUND(AVG(TotalTimeInBed - TotalMinutesAsleep),2) AS avg_awake_time,
-  AVG(TotalMinutesAsleep/60) AS sleeping_time
+  ROUND(AVG(TotalMinutesAsleep) AS sleeping_time
 FROM `bella-beat-project-438009.upload_data.sleep_day`
-`
+```
 Result:
-![image](https://github.com/user-attachments/assets/7a93fd06-1f84-4881-be2b-ba765d51ebe7)
+| min_awake_time | max_awake_time | avg_awake_time | sleeping_time |
+| --- | --- | --- | --- |
+| 0 | 371 | 39.17 | 419.47 |
+|  |
 
-On average, people sleep for 7 hours a day but spend about 40 mins on the bed a wake. 
+On average, people sleep for 419 mins (about 7 hours) a day but spend about 40 mins on the bed a wake. 
 
 ## Act
 Some insights from the analyze
