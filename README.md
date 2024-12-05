@@ -78,7 +78,8 @@ HAVING COUNT(*) >1
 | 4702921684 | 2016-05-07 12:00:00.000000 UTC | 1 | 2 |
 | 8378563200 | 2016-04-25 12:00:00.000000 UTC | 1 | 2 |
 
-Delete the duplicate rows in the sleep_day table
+- Delete the duplicate rows in the `sleep_day` table
+
 ```sql
 CREATE TABLE `bella-beat-project-438009.upload_data.sleep_day_clean`
 AS
@@ -91,7 +92,7 @@ ALTER TABLE `bella-beat-project-438009.upload_data.sleep_day_clean`
 RENAME TO `sleep_day`
 ```
 
-- I also noticed that there are records in the daily_activity table with TotalSteps = 0 which means some users did not track their steps every day.
+- I also noticed that there are records in the `daily_activity` table with `TotalSteps = 0`, which means some users did not track their steps every day.
 It is possible to have no fairly/lightly/very active time but not possible to have 0 steps a day. 
 
 ```sql
@@ -100,10 +101,9 @@ WHERE TotalSteps = 0
 
 SELECT * FROM `bella-beat-project-438009.upload_data.sleep_day` WHERE TotalSleepRecords = 0
 ```
-There are 77 records with TotalSteps = 0 in the daily_activity table which should not be included in the calculation later.
-There were no TotalSleepRecords = 0 in the sleep_day table.
-
-I deleted the records with TotalSteps = 0.
+- There are 77 records with `TotalSteps = 0` in the `daily_activity` table which should not be included in the calculation later.
+- There were no `TotalSleepRecords = 0` in the `sleep_day` table.
+- I deleted the records with `TotalSteps = 0`.
 
 ```sql
 CREATE TABLE `bella-beat-project-438009.upload_data.daily_activity_clean` 
@@ -118,8 +118,8 @@ ALTER TABLE `bella-beat-project-438009.upload_data..daily_activity_clean`
 RENAME TO `daily_activity`
 ```
 
-## Analyze and Share 
-I analyzed and used Tableau to create some visualizations attached to the analyze result below.
+### 4. Analyze and Share 
+- I analyzed and used Tableau to create some visualizations attached to the analyze result below.
 
 1. Check average steps, sedentary time, lightly active, fairly active, very active minutes and average sleep minutes for all the users   
 ```sql
@@ -132,17 +132,15 @@ SELECT
 
 FROM `bella-beat-project-438009.upload_data.daily_activity` 
 WHERE TotalSteps <> 0
-
 ```
+
 Result:
 | steps_average | sendentary_average | fairly_active_average | lightly_active_average | very_active_average |
 | --: | --: | --: | --: | --: |
 | 8319.0 | 956.0 | 15.0 | 210.0 | 23.0 |
 
-
-The Centers for Disease Control and Prevention (CDC) recommends taking 8,000 steps per day, aiming for 10,000 steps per day. The average steps of Bella Beat users is 8319 which met this criteria. 
+The Centers for Disease Control and Prevention (CDC) recommends taking 8,000 steps per day, aiming for 10,000 steps per day. The average steps of Bella Beat users is 8319 which met this criteria.
 Also, the total of average fairly active and and very active time is 38 mins which also met the American Heart Association recommendations for walking at least 30 minutes per day to reduce the risk of chronic diseases.
-
 
 Average sleep minutes from sleep_day table
 ```sql
@@ -150,13 +148,15 @@ SELECT
   ROUND(AVG(TotalMinutesAsleep),2) AS average_sleep 
 FROM `bella-beat-project-438009.upload_data.sleep_day` 
 ```
+
 Result: average sleeping time is 419 mins a day.
+
 The average sedentary time is 956 mins (about 16 hours) including the average sleeping time of 419 mins (about 7 hours).
+
 It means that on average, users had 9 hours of sedentary time when they were awake which is a big part of the time in a day.
 Also, most users prefer light activity. 
 
 ![image](https://github.com/user-attachments/assets/93367a2a-375e-4564-b3b8-478015d45a3e)
-
 
 2. Average steps, distance, and calories by different days of the week
 
@@ -171,6 +171,7 @@ WHERE TotalSteps <> 0
 GROUP BY day_name, weekday
 ORDER BY weekday
 ```
+
 Result: 
 | avg_steps | avg_distance | day_name | weekday |
 | --: | --: | --: | --: |
@@ -185,11 +186,9 @@ Result:
 
 ![image](https://github.com/user-attachments/assets/726309ed-6564-421f-9b90-136fc60be79d)
 
-
 There are no big differences between the number of steps on different days of the week. Further analysis is needed.
 
-
-2. Average steps per hour
+3. Average steps per hour
 ```sql
 SELECT 
   ROUND(AVG(step_count),0) AS avg_steps,
@@ -198,8 +197,8 @@ FROM `bella-beat-project-438009.upload_data.hourly_step`
 GROUP BY active_hour
 ORDER BY active_hour
 ```
-Result:
 
+Result:
 | avg_steps | active_hour |
 | --: | --: |
 | 42.0 | 0 |
@@ -227,9 +226,8 @@ Result:
 | 238.0 | 22 |
 | 122.0 | 23 |
 
-
-Users walk the most around 12pm-2pm, 5 pm-7pm. They are lunch time and evening time
-The least active time was at night 0 am - 5 am. 
+Users walk the most around 12pm-2pm, 5pm-7pm. They are lunch time and evening time.
+The least active time was at night 12am-5am. 
 
 ![image](https://github.com/user-attachments/assets/a0fc35e8-6dee-4912-99a5-f1074de23897)
 
@@ -243,7 +241,8 @@ FROM `bella-beat-project-438009.upload_data.sleep_day`
 GROUP BY day_name, weekday
 ORDER BY weekday
 ```
-   Result:
+
+Result:
 | avg_sleep_hours | day_name | weekday |
 | --- | --- | --- |
 | 7.55 | Sunday | 1 |
@@ -258,8 +257,7 @@ Users sleep the most on Sunday and Wednesday.
 
 ![image](https://github.com/user-attachments/assets/dd81be35-95ad-409a-8a2b-6a1f015cac99)
 
-
- 5. Sleep pattern of Fitbeat users
+5. Sleep pattern of Fitbeat users
 ```sql
 SELECT 
   MIN(TotalTimeInBed - TotalMinutesAsleep) AS min_awake_time,
@@ -268,6 +266,7 @@ SELECT
   ROUND(AVG(TotalMinutesAsleep) AS sleeping_time
 FROM `bella-beat-project-438009.upload_data.sleep_day`
 ```
+
 Result:
 | min_awake_time | max_awake_time | avg_awake_time | sleeping_time |
 | --- | --- | --- | --- |
@@ -276,8 +275,8 @@ Result:
 
 On average, people sleep for 419 mins (about 7 hours) a day but spend about 40 mins on the bed a wake. 
 
-## Act
-Some insights from the analyze
+### 5. Act
+Some insights from the analyze:
 - Not all users use sleep tracker and weight log regularly, especially weight log is the least used function.
 - Some users forgot to track their steps in some days
 - On average, users had about 9 hours of sedentary time which is a large part in a day
@@ -286,10 +285,10 @@ Some insights from the analyze
 - No clear correlation between weekdays and number of steps
 - Users are no sleeping at least 8 hours a day 
 
-  Recommendations
-  - Further surveys, and analysis are needed to check why the weight log is not popular (eg the relevant of the function, ease of use etc)
-  - Remind the users to check their steps every day
-  - The best time for advertisement is around 12pm-2pm, 5 pm-7p when people are active and can look at the app more often
-  - Push messages about the risk of high sedentary time, health benefits of walking more than 8k steps per day to make people more active, especially on the day people tend to be less active such as Sunday
-  - Send messages about bad effects of not having enough 8 hours sleeping a day. May create some more features to make a sleep schedule or help peole have a better sleep
-  - 
+Recommendations:
+- Further surveys, and analysis are needed to check why the weight log is not popular (eg the relevant of the function, ease of use etc)
+- Remind the users to check their steps every day
+- The best time for advertisement is around 12pm-2pm, 5 pm-7p when people are active and can look at the app more often
+- Push messages about the risk of high sedentary time, health benefits of walking more than 8k steps per day to make people more active, especially on the day people tend to be less active such as Sunday
+- Send messages about bad effects of not having enough 8 hours sleeping a day. May create some more features to make a sleep schedule or help peole have a better sleep
+
