@@ -27,7 +27,7 @@ It contains 18 csv files about daily activity, sleep, weight, calories and inten
 
 The data is only for the months of April and May in 2016 so it is not up to date and may not fully reflect the current trends in smart device usage.
 
-I did not use all the 18 files. The `daily_steps`, `daily_calories` and `daily_intensity` data were included in the daily_activity table.
+I did not use all the 18 files. The `daily_steps`, `daily_calories` and `daily_intensity` data were included in the `daily_activity` table.
 
 ### 3. Process 
 
@@ -74,7 +74,7 @@ FROM `bella-beat-project-438009.upload_data.sleep_day`
 GROUP BY Id,sleepDay, totalsleeprecords
 HAVING COUNT(*) >1
 ```
-`daily_activity` and `hourly_steps` have no duplicate while the sleep_day table has 3 duplicates.
+`daily_activity` and `hourly_steps` have no duplicate while the `sleep_day` table has 3 duplicates.
 
 | Id | sleepDay | totalsleeprecords | count |
 | --- | --- | --: | --: |
@@ -168,7 +168,7 @@ Also, most users prefer light activity.
 
 ![image](https://github.com/user-attachments/assets/93367a2a-375e-4564-b3b8-478015d45a3e)
 
-2. Average steps, distance, and calories by different days of the week.
+2. Average steps and distance by different days of the week.
 
 ```sql
 SELECT 
