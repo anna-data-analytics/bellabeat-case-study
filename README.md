@@ -14,6 +14,7 @@ It follows the six-step data analysis process:
 ## Scenario 
 Bellabeat is a high-tech company that manufactures health-focused smart products. Collecting data on activity, sleep, stress, and reproductive health has allowed Bellabeat to empower women with knowledge about their health and habits. The marketing analytics team has been asked to analyze smart device data to gain insight into how consumers are using their smart devices. These insights will then guide the marketing strategy for the company. The analysis and high-level recommendations will be presented to the Bellabeat executive team.
 
+## Work Details
 ### 1. Ask
 In this case study, I will analyze Fitbit data to answer the following questions:
 - What are some trends in smart device usage?
@@ -42,10 +43,13 @@ SELECT COUNT(DISTINCT Id)
 FROM `bella-beat-project-438009.upload_data.sleep_day` 
 ```
 
-- `daily_activity` and `hourly_steps` have 33 unique users. 
-- `sleep_day` has only 24 unique users.
-- 33 users is a very small sample, not reflecting the whole population but it still gives us some interesting insights. 
-- Sleep tracker and Weight log are less used functions. Weight log are the least popular. Maybe because it does not change very often or is not relevant to use. 
+`daily_activity` and `hourly_steps` have 33 unique users. 
+
+`sleep_day` has only 24 unique users.
+
+33 users is a very small sample, not reflecting the whole population but it still gives us some interesting insights. 
+
+Sleep tracker and Weight log are less used functions. Weight log are the least popular. Maybe because it does not change very often or is not relevant to use. 
 
 #### Check for duplicates in the 3 tables 
 ```sql
@@ -70,7 +74,7 @@ FROM `bella-beat-project-438009.upload_data.sleep_day`
 GROUP BY Id,sleepDay, totalsleeprecords
 HAVING COUNT(*) >1
 ```
-- `daily_activity` and `hourly_steps` have no duplicate while the sleep_day table has 3 duplicates.
+`daily_activity` and `hourly_steps` have no duplicate while the sleep_day table has 3 duplicates.
 
 | Id | sleepDay | totalsleeprecords | count |
 | --- | --- | --: | --: |
@@ -78,7 +82,7 @@ HAVING COUNT(*) >1
 | 4702921684 | 2016-05-07 12:00:00.000000 UTC | 1 | 2 |
 | 8378563200 | 2016-04-25 12:00:00.000000 UTC | 1 | 2 |
 
-- Delete the duplicate rows in the `sleep_day` table
+Delete the duplicate rows in the `sleep_day` table
 
 ```sql
 CREATE TABLE `bella-beat-project-438009.upload_data.sleep_day_clean`
@@ -92,7 +96,8 @@ ALTER TABLE `bella-beat-project-438009.upload_data.sleep_day_clean`
 RENAME TO `sleep_day`
 ```
 
-- I also noticed that there are records in the `daily_activity` table with `TotalSteps = 0`, which means some users did not track their steps every day.
+I also noticed that there are records in the `daily_activity` table with `TotalSteps = 0`, which means some users did not track their steps every day.
+
 It is possible to have no fairly/lightly/very active time but not possible to have 0 steps a day. 
 
 ```sql
@@ -101,9 +106,11 @@ WHERE TotalSteps = 0
 
 SELECT * FROM `bella-beat-project-438009.upload_data.sleep_day` WHERE TotalSleepRecords = 0
 ```
-- There are 77 records with `TotalSteps = 0` in the `daily_activity` table which should not be included in the calculation later.
-- There were no `TotalSleepRecords = 0` in the `sleep_day` table.
-- I deleted the records with `TotalSteps = 0`.
+There are 77 records with `TotalSteps = 0` in the `daily_activity` table which should not be included in the calculation later.
+
+There were no `TotalSleepRecords = 0` in the `sleep_day` table.
+
+I deleted the records with `TotalSteps = 0`.
 
 ```sql
 CREATE TABLE `bella-beat-project-438009.upload_data.daily_activity_clean` 
@@ -119,9 +126,9 @@ RENAME TO `daily_activity`
 ```
 
 ### 4. Analyze and Share 
-- I analyzed and used Tableau to create some visualizations attached to the analyze result below.
+I analyzed and used Tableau to create some visualizations attached to the analyze result below.
 
-1. Check average steps, sedentary time, lightly active, fairly active, very active minutes and average sleep minutes for all the users   
+i. Check average steps, sedentary time, lightly active, fairly active, very active minutes and average sleep minutes for all the users   
 ```sql
 SELECT 
   ROUND(AVG(TotalSteps)) AS steps_average,
@@ -158,7 +165,7 @@ Also, most users prefer light activity.
 
 ![image](https://github.com/user-attachments/assets/93367a2a-375e-4564-b3b8-478015d45a3e)
 
-2. Average steps, distance, and calories by different days of the week
+ii. Average steps, distance, and calories by different days of the week
 
 ```sql
 SELECT 
@@ -188,7 +195,7 @@ Result:
 
 There are no big differences between the number of steps on different days of the week. Further analysis is needed.
 
-3. Average steps per hour
+iii. Average steps per hour
 ```sql
 SELECT 
   ROUND(AVG(step_count),0) AS avg_steps,
@@ -231,7 +238,7 @@ The least active time was at night 12am-5am.
 
 ![image](https://github.com/user-attachments/assets/a0fc35e8-6dee-4912-99a5-f1074de23897)
 
-4. Average sleep duration (in hours) by weekday
+iv. Average sleep duration (in hours) by weekday
 ```sql
 SELECT 
   ROUND((AVG(TotalMinutesAsleep)/60),2) AS avg_sleep_hours,
@@ -257,7 +264,7 @@ Users sleep the most on Sunday and Wednesday.
 
 ![image](https://github.com/user-attachments/assets/dd81be35-95ad-409a-8a2b-6a1f015cac99)
 
-5. Sleep pattern of Fitbeat users
+v. Sleep pattern of Fitbeat users
 ```sql
 SELECT 
   MIN(TotalTimeInBed - TotalMinutesAsleep) AS min_awake_time,
@@ -276,7 +283,7 @@ Result:
 On average, people sleep for 419 mins (about 7 hours) a day but spend about 40 mins on the bed a wake. 
 
 ### 5. Act
-Some insights from the analyze:
+#### Insights from the analysis
 - Not all users use sleep tracker and weight log regularly, especially weight log is the least used function.
 - Some users forgot to track their steps in some days
 - On average, users had about 9 hours of sedentary time which is a large part in a day
@@ -285,7 +292,7 @@ Some insights from the analyze:
 - No clear correlation between weekdays and number of steps
 - Users are no sleeping at least 8 hours a day 
 
-Recommendations:
+#### Recommendations
 - Further surveys, and analysis are needed to check why the weight log is not popular (eg the relevant of the function, ease of use etc)
 - Remind the users to check their steps every day
 - The best time for advertisement is around 12pm-2pm, 5 pm-7p when people are active and can look at the app more often
