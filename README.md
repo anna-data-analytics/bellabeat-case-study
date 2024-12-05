@@ -24,16 +24,16 @@ I did not use all the 18 files. The daily_steps, daily_calories and daily_intens
 
 ## Process 
 - Check the unique users in daily_activity, hourly_steps and sleep_day table
-`
+```sql
 SELECT COUNT(DISTINCT Id)
 FROM `bella-beat-project-438009.upload_data.daily_activity`
-`
+
 SELECT COUNT(DISTINCT Id)
 FROM `bella-beat-project-438009.upload_data.hourly_step`
 
-`SELECT COUNT(DISTINCT Id)
+SELECT COUNT(DISTINCT Id)
 FROM `bella-beat-project-438009.upload_data.sleep_day` 
-`
+```
 daily_activity and hourly_steps have 33 unique users. 
 sleep_day has only 24 unique users.
 33 users is a very small sample, not reflecting the whole population but it still gives us some interesting insights. 
