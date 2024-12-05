@@ -128,7 +128,8 @@ RENAME TO `daily_activity`
 ### 4. Analyze and Share 
 I analyzed and used Tableau to create some visualizations attached to the analyze result below.
 
-i. Check average steps, sedentary time, lightly active, fairly active, very active minutes and average sleep minutes for all the users   
+1. Check average steps, sedentary time, lightly active, fairly active, very active minutes and average sleep minutes for all the users.
+
 ```sql
 SELECT 
   ROUND(AVG(TotalSteps)) AS steps_average,
@@ -156,7 +157,9 @@ SELECT
 FROM `bella-beat-project-438009.upload_data.sleep_day` 
 ```
 
-Result: average sleeping time is 419 mins a day.
+Result:
+
+Average sleeping time is 419 mins a day.
 
 The average sedentary time is 956 mins (about 16 hours) including the average sleeping time of 419 mins (about 7 hours).
 
@@ -165,7 +168,7 @@ Also, most users prefer light activity.
 
 ![image](https://github.com/user-attachments/assets/93367a2a-375e-4564-b3b8-478015d45a3e)
 
-ii. Average steps, distance, and calories by different days of the week
+2. Average steps, distance, and calories by different days of the week.
 
 ```sql
 SELECT 
@@ -195,7 +198,8 @@ Result:
 
 There are no big differences between the number of steps on different days of the week. Further analysis is needed.
 
-iii. Average steps per hour
+3. Average steps per hour.
+
 ```sql
 SELECT 
   ROUND(AVG(step_count),0) AS avg_steps,
@@ -233,12 +237,16 @@ Result:
 | 238.0 | 22 |
 | 122.0 | 23 |
 
-Users walk the most around 12pm-2pm, 5pm-7pm. They are lunch time and evening time.
+Users walk the most around 12pm-2pm, 5pm-7pm. 
+
+They are lunch time and evening time.
+
 The least active time was at night 12am-5am. 
 
 ![image](https://github.com/user-attachments/assets/a0fc35e8-6dee-4912-99a5-f1074de23897)
 
-iv. Average sleep duration (in hours) by weekday
+4. Average sleep duration (in hours) by weekday.
+
 ```sql
 SELECT 
   ROUND((AVG(TotalMinutesAsleep)/60),2) AS avg_sleep_hours,
@@ -251,7 +259,7 @@ ORDER BY weekday
 
 Result:
 | avg_sleep_hours | day_name | weekday |
-| --- | --- | --- |
+| --:- | -:- | --: |
 | 7.55 | Sunday | 1 |
 | 6.98 | Monday | 2 |
 | 6.74 | Tuesday | 3 |
@@ -264,7 +272,8 @@ Users sleep the most on Sunday and Wednesday.
 
 ![image](https://github.com/user-attachments/assets/dd81be35-95ad-409a-8a2b-6a1f015cac99)
 
-v. Sleep pattern of Fitbeat users
+5. Sleep pattern of Fitbeat users.
+
 ```sql
 SELECT 
   MIN(TotalTimeInBed - TotalMinutesAsleep) AS min_awake_time,
@@ -276,9 +285,8 @@ FROM `bella-beat-project-438009.upload_data.sleep_day`
 
 Result:
 | min_awake_time | max_awake_time | avg_awake_time | sleeping_time |
-| --- | --- | --- | --- |
+| --: | --: | --: | --: |
 | 0 | 371 | 39.17 | 419.47 |
-|  |
 
 On average, people sleep for 419 mins (about 7 hours) a day but spend about 40 mins on the bed a wake. 
 
