@@ -259,7 +259,7 @@ ORDER BY weekday
 
 Result:
 | avg_sleep_hours | day_name | weekday |
-| --:- | -:- | --: |
+| --: | --- | --: |
 | 7.55 | Sunday | 1 |
 | 6.98 | Monday | 2 |
 | 6.74 | Tuesday | 3 |
