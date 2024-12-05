@@ -1,29 +1,36 @@
-# bella_beat_SQL
-Bellabeat Smart Device case study 
-This case study is a data analysis project, conducted as a capstone project of Google Data Analytics Professional Certificate course, using the data from Bellabeat Smart Device Usage.
-It follows the six-step data analysis process: 
-## Ask 
-## Prepare 
-## Process 
-## Analyze 
-## Share
-## Act
+# Bellabeat Project
+Bellabeat Smart Device case study.
 
-# Scenario 
+This case study is a data analysis project, conducted as a capstone project of Google Data Analytics Professional Certificate course, using the data from Bellabeat Smart Device Usage.
+
+It follows the six-step data analysis process: 
+1. Ask 
+2. Prepare 
+3. Process 
+4. Analyze 
+5. Share
+6. Act
+
+## Scenario 
 Bellabeat is a high-tech company that manufactures health-focused smart products. Collecting data on activity, sleep, stress, and reproductive health has allowed Bellabeat to empower women with knowledge about their health and habits. The marketing analytics team has been asked to analyze smart device data to gain insight into how consumers are using their smart devices. These insights will then guide the marketing strategy for the company. The analysis and high-level recommendations will be presented to the Bellabeat executive team.
-## Ask
-  In this case study, I will analyze Fitbit data to answer the following questions:
+
+### 1. Ask
+In this case study, I will analyze Fitbit data to answer the following questions:
 - What are some trends in smart device usage?
 - How can these trends help influence Bellabeat marketing strategy?
 
-## Prepare
-Data source https://www.kaggle.com/arashnic/fitbit 
-It contains 18 csv files about daily activity, sleep, weight, calories and intensities.
-The data is only for the months of April and May in 2016 so it is not up to date and may not fully reflect the current trends in smart device usage.
-I did not use all the 18 files. The daily_steps, daily_calories and daily_intensity data were included in the daily_activity table.
+### 2. Prepare
+Data source: https://www.kaggle.com/arashnic/fitbit. 
 
-## Process 
-- Check the unique users in daily_activity, hourly_steps and sleep_day table
+It contains 18 csv files about daily activity, sleep, weight, calories and intensities.
+
+The data is only for the months of April and May in 2016 so it is not up to date and may not fully reflect the current trends in smart device usage.
+
+I did not use all the 18 files. The `daily_steps`, `daily_calories` and `daily_intensity` data were included in the daily_activity table.
+
+### 3. Process 
+
+#### Check the unique users in daily_activity, hourly_steps and sleep_day table
 ```sql
 SELECT COUNT(DISTINCT Id)
 FROM `bella-beat-project-438009.upload_data.daily_activity`
@@ -34,13 +41,13 @@ FROM `bella-beat-project-438009.upload_data.hourly_step`
 SELECT COUNT(DISTINCT Id)
 FROM `bella-beat-project-438009.upload_data.sleep_day` 
 ```
-daily_activity and hourly_steps have 33 unique users. 
-sleep_day has only 24 unique users.
-33 users is a very small sample, not reflecting the whole population but it still gives us some interesting insights. 
-Sleep tracker and Weight log are less used functions. Weight log are the least popular. Maybe because it does not change very often or is not relevant to use. 
 
+- `daily_activity` and `hourly_steps` have 33 unique users. 
+- `sleep_day` has only 24 unique users.
+- 33 users is a very small sample, not reflecting the whole population but it still gives us some interesting insights. 
+- Sleep tracker and Weight log are less used functions. Weight log are the least popular. Maybe because it does not change very often or is not relevant to use. 
 
- - Check for duplicates in the 3 tables 
+#### Check for duplicates in the 3 tables 
 ```sql
 SELECT Id, ActivityDate, TotalSteps, Count(*)
 FROM `bella-beat-project-438009.upload_data.daily_activity` 
@@ -63,14 +70,13 @@ FROM `bella-beat-project-438009.upload_data.sleep_day`
 GROUP BY Id,sleepDay, totalsleeprecords
 HAVING COUNT(*) >1
 ```
-daily_activity and hourly_steps have no duplicate while the sleep_day table has 3 duplicates.
+- `daily_activity` and `hourly_steps` have no duplicate while the sleep_day table has 3 duplicates.
 
 | Id | sleepDay | totalsleeprecords | count |
 | --- | --- | --: | --: |
 | 4388161847 | 2016-05-05 12:00:00.000000 UTC | 1 | 2 |
 | 4702921684 | 2016-05-07 12:00:00.000000 UTC | 1 | 2 |
 | 8378563200 | 2016-04-25 12:00:00.000000 UTC | 1 | 2 |
-
 
 Delete the duplicate rows in the sleep_day table
 ```sql
