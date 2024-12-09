@@ -27,11 +27,12 @@ It contains 18 csv files about daily activity, sleep, weight, calories and inten
 
 The data is only for the months of April and May in 2016 so it is not up to date and may not fully reflect the current trends in smart device usage.
 
-I did not use all the 18 files. The `daily_steps`, `daily_calories` and `daily_intensity` data were included in the `daily_activity` table.
+For my planning questions, I decided to use `daily_activity`, `hourly_steps`, `sleep_day` and `weightLog` table. 
+The `daily_steps`, `daily_calories` and `daily_intensity` data were included in the `daily_activity` table.
 
 ### 3. Process 
 
-#### Check the unique users in daily_activity, hourly_steps and sleep_day table
+#### Check the unique users in daily_activity, hourly_steps, sleep_day and weightLog table
 ```sql
 SELECT COUNT(DISTINCT Id)
 FROM `bella-beat-project-438009.upload_data.daily_activity`
@@ -40,18 +41,23 @@ SELECT COUNT(DISTINCT Id)
 FROM `bella-beat-project-438009.upload_data.hourly_step`
 
 SELECT COUNT(DISTINCT Id)
-FROM `bella-beat-project-438009.upload_data.sleep_day` 
+FROM `bella-beat-project-438009.upload_data.sleep_day`
+
+SELECT COUNT (DISTINCT Id)
+FROM `bella-beat-project-438009.upload_data.weightLog` 
 ```
 
 `daily_activity` and `hourly_steps` have 33 unique users. 
 
 `sleep_day` has only 24 unique users.
 
+`weightLog` has only 8 unique users. 
+
 33 users is a very small sample, not reflecting the whole population but it still gives us some interesting insights. 
 
-Sleep tracker and Weight log are less used functions. Weight log are the least popular. Maybe because it does not change very often or is not relevant to use. 
+Sleep tracker and Weight log are less used functions. Weight log are the least popular and does not have enough data so I decided not to use it. Maybe because weight does not change very often or this function is not relevant to use. 
 
-#### Check for duplicates in the 3 tables 
+#### Check for duplicates in the 3 tables daily_activity, hourly_steps and sleep_day 
 ```sql
 SELECT Id, ActivityDate, TotalSteps, Count(*)
 FROM `bella-beat-project-438009.upload_data.daily_activity` 
